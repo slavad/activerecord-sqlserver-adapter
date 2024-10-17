@@ -8,7 +8,8 @@ module ActiveRecord
           name = SQLServer::Utils.extract_identifiers(database)
           db_options = create_database_options(options)
           edition_options = create_database_edition_options(options)
-          execute "CREATE DATABASE #{name} #{db_options} #{edition_options}"
+          compatibility_options = create_database_compatibility_options(options)
+          execute "CREATE DATABASE #{name} #{db_options} #{edition_options} #{compatibility_options}"
         end
 
         def drop_database(database)
@@ -30,6 +31,14 @@ module ActiveRecord
         end
 
         private
+
+        def create_database_compatibility_options(options = {})
+          compatibility_level = options[:compatibility_level]
+
+          return "" if compatibility_level.blank?
+
+          "WITH COMPATIBILITY_LEVEL = #{compatibility_level}"
+        end
 
         def create_database_options(options = {})
           keys  = [:collate]
