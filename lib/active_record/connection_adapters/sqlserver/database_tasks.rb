@@ -10,7 +10,7 @@ module ActiveRecord
           edition_options = create_database_edition_options(options)
           compatibility_options = create_database_compatibility_options(options)
           execute "CREATE DATABASE #{name} #{db_options} #{edition_options}"
-          execute "ALTER DATABASE #{name} SET COMPATIBILITY_LEVEL = #{compatibility_level}" if compatibility_options.present?
+          execute "ALTER DATABASE #{name} SET COMPATIBILITY_LEVEL = #{compatibility_options}" if compatibility_options.present?
         end
 
         def drop_database(database)
