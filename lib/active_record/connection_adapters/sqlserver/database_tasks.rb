@@ -33,11 +33,16 @@ module ActiveRecord
         private
 
         def create_database_compatibility_options(options = {})
-          compatibility_level = options[:compatibility_level]
-
-          return "" if compatibility_level.blank?
-
-          "WITH COMPATIBILITY_LEVEL = #{compatibility_level}"
+          keys  = [:compatibility_level]
+          copts = @connection_parameters
+          options = {
+            compatibility_level: copts[:compatibility_level]
+          }.merge(options.symbolize_keys).select { |_, v|
+            v.present?
+          }.slice(*keys).map { |k, v|
+            "WITH #{k.to_s.upcase} = #{v}"
+          }.join(" ")
+          options
         end
 
         def create_database_options(options = {})
