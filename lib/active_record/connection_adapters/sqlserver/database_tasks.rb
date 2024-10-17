@@ -41,7 +41,7 @@ module ActiveRecord
           }.merge(options.symbolize_keys).select { |_, v|
             v.present?
           }.slice(*keys).map { |k, v|
-            "WITH #{k.to_s.upcase} = #{v}"
+            "#{k.to_s.upcase} = #{v}"
           }.join(" ")
           options
         end
